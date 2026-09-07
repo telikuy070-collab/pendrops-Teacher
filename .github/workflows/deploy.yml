@@ -1,0 +1,104 @@
+name: CI + Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-pages
+  cancel-in-progress: false
+
+env:
+  NODE_VERSION: 20
+
+jobs:
+  # ─── Lint, Typecheck & Test ─────────────────────────────────────────
+  qa:
+    name: QA
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npx eslint . --max-warnings=0
+
+      - name: Typecheck (student)
+        run: npx tsc --noEmit
+
+      - name: Typecheck (teacher)
+        run: npx tsc --noEmit -p tsconfig.teacher.json
+
+      - name: Test
+        run: npx vitest run
+
+  # ─── Build & Deploy Student PWA ──────────────────────────────────────
+  deploy-student:
+    name: Deploy Student PWA
+    needs: qa
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build student PWA
+        run: npm run build
+
+      - name: Deploy student to gh-pages branch
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: dist
+          # Student app deployed to root of gh-pages branch
+          # URL: https://telikuy070-collab.github.io/pendrops/
+          branch: gh-pages
+          force_orphan: false
+
+  # ─── Build & Deploy Teacher PWA ──────────────────────────────────────
+  deploy-teacher:
+    name: Deploy Teacher PWA
+    needs: qa
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build teacher PWA
+        # base URL configured to: https://telikuy070-collab.github.io/pendrops/pendrops-teacher/
+        run: npm run build:teacher
+
+      - name: Deploy teacher to gh-pages branch
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: dist-teacher
+          # Teacher app deployed to pendrops-teacher/ subdirectory
+          # URL: https://telikuy070-collab.github.io/pendrops/pendrops-teacher/
+          destination_dir: pendrops-teacher
+          branch: gh-pages
+          force_orphan: false

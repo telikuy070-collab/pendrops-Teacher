@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#0f172a" />
+    <meta name="description" content="PenDrops Мугалим — управление домашними заданиями, посещаемостью и оценками для преподавателей" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="PenDrops Мугалим" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>PenDrops Мугалим — Вход</title>
+    <!-- Teacher-specific manifest -->
+    <link rel="manifest" href="/pendrops/pendrops-teacher/manifest.teacher.json" />
+    <!-- Icons from shared assets -->
+    <link rel="icon" type="image/svg+xml" href="./assets/icons/icon.svg" />
+    <link rel="apple-touch-icon" href="./assets/icons/icon-192.png" />
+  </head>
+  <body>
+    <div id="appContainer">
+      <!-- Root app rendered by JS -->
+    </div>
+    <div id="toast" class="toast"></div>
+
+    <!-- Auth Modal -->
+    <template id="template-auth-modal" hidden>
+      <div class="modal auth-modal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content auth-content">
+          <div class="modal-header">
+            <h2 id="authTitle">🔐 Вход в PenDrops Мугалим</h2>
+          </div>
+          <form id="authForm" class="auth-form">
+            <div class="field">
+              <label for="teacherEmail">Email</label>
+              <input type="email" id="teacherEmail" placeholder="teacher@college.edu" autocomplete="email" required />
+            </div>
+            <div class="field">
+              <label for="teacherPassword">Пароль</label>
+              <input type="password" id="teacherPassword" placeholder="••••••••" autocomplete="current-password" required />
+            </div>
+            <button type="submit" class="btn primary block">Войти</button>
+            <div class="admin-error" id="authError"></div>
+          </form>
+        </div>
+      </div>
+    </template>
+
+    <!-- Group Page Template -->
+    <template id="template-group-page" hidden>
+      <div class="page group-page" data-group-id="{{groupId}}">
+        <header class="page-header">
+          <h1>{{groupName}}</h1>
+          <div class="group-meta">
+            <span class="btn-group">{{studentCount}} учеников</span>
+          </div>
+        </header>
+        <nav class="subnav">
+          <button class="subnav-btn active" data-view="students">Ученики</button>
+          <button class="subnav-btn" data-view="attendance">Посещаемость</button>
+          <button class="subnav-btn" data-view="grades">Оценки</button>
+        </nav>
+        <section class="subview-container">
+          <div class="subview students-view"></div>
+          <div class="subview attendance-view hidden"></div>
+          <div class="subview grades-view hidden"></div>
+        </section>
+      </div>
+    </template>
+
+    <!-- Student Card Template -->
+    <template id="template-student-card" hidden>
+      <div class="card student-card" data-student-id="{{id}}">
+        <div class="card-top">
+          <span class="avatar">{{avatar}}</span>
+          <div class="student-info">
+            <div class="student-name">{{name}}</div>
+            <div class="student-meta">{{group}}</div>
+          </div>
+        </div>
+        <div class="card-tags">
+          <span class="attendance-badge {{attendanceClass}}">{{attendanceLabel}}</span>
+        </div>
+        <div class="card-actions">
+          <button class="btn ghost small" data-action="edit">✏️</button>
+        </div>
+      </div>
+    </template>
+
+    <!-- Homework List Item Template -->
+    <template id="template-homework-item" hidden>
+      <div class="card homework-card" data-id="{{id}}" data-status="{{status}}">
+        <div class="card-top">
+          <span class="time">{{date}}</span>
+          <span class="status-pill {{statusClass}}">{{statusLabel}}</span>
+        </div>
+        <div class="subject">{{title}}</div>
+        <div class="row-info">
+          <span class="chip chip-group"><b>Группа:</b> {{group}}</span>
+          <span class="chip chip-deadline" data-if="hasDeadline"><b>Дедлайн:</b> {{deadline}}</span>
+        </div>
+        <div class="card-actions">
+          <button class="btn small primary" data-action="view-submissions">Отправки ({{submissionCount}})</button>
+        </div>
+      </div>
+    </template>
+
+    <!-- Submission Item Template -->
+    <template id="template-submission-item" hidden>
+      <div class="card submission-card" data-submission-id="{{id}}" data-student-id="{{studentId}}">
+        <div class="card-top">
+          <span class="avatar">{{studentName}}</span>
+          <span class="time">{{submittedAt}}</span>
+          <span class="grade-badge {{gradeClass}}" data-if="hasGrade">{{grade}}</span>
+        </div>
+        <div class="subject">{{fileName}}</div>
+        <div class="card-actions">
+          <button class="btn small ghost" data-action="download">📎 Скачать</button>
+          <button class="btn small primary" data-action="grade">Оценить</button>
+        </div>
+      </div>
+    </template>
+
+    <script type="module" src="src/app.ts"></script>
+  </body>
+</html>
