@@ -1,9 +1,0 @@
-node_modules/
-dist/
-dist-teacher/
-package-lock.json
-xlsx.full.min.js
-*.min.js
-scripts/patch-*.js
-src/app.original.js
-teacher-app/public/sw.js
