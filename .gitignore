@@ -31,3 +31,7 @@ Thumbs.db
 # Vite / build cache
 .vite/
 .eslintcache
+
+# Generated service worker (injected with env secrets during build)
+teacher-app/public/sw.js
+
