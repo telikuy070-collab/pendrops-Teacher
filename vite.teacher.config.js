@@ -64,7 +64,7 @@ export default defineConfig(({ mode }) => {
 
   return {
     root: 'teacher-app',
-    base: isProd ? 'https://telikuy070-collab.github.io/pendrops/pendrops-teacher/' : '/',
+    base: isProd ? 'https://telikuy070-collab.github.io/pendrops-Teacher/' : '/',
     server: {
       port: 8081,
       open: true,
