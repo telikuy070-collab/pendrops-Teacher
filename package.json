@@ -20,6 +20,7 @@
     "typecheck": "tsc --noEmit",
     "typecheck:teacher": "tsc --noEmit -p tsconfig.teacher.json",
     "lint": "eslint . --fix && prettier --write .",
+    "analyze": "vite build --mode production && npx vite-bundle-analyzer dist",
     "prepare": "husky"
   },
   "engines": {
@@ -41,6 +42,7 @@
     "xlsx": "^0.18.5"
   },
   "dependencies": {
+    "@preact/signals": "^2.11.2",
     "@supabase/supabase-js": "^2.115.0",
     "zod": "^4.5.4"
   }
