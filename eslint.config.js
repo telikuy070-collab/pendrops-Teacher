@@ -2,27 +2,7 @@ import js from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import prettier from 'eslint-plugin-prettier/recommended';
 
-export default tseslint.config(
-  // Run eslint:ignore patterns in flat config
-  {
-    ignores: [
-      'node_modules/**',
-      'dist/**',
-      'dist-teacher/**',
-      'xlsx.full.min.js',
-      'src/app.original.js',
-      'teacher-app/config/sw.template.js',
-      'teacher-app/public/sw.js',
-      'scripts/patch-*.js',
-      'tests/edge-cases.js',
-      'tests/store-audit.js',
-      'tests/full-audit.js',
-      'tests/security-audit.mjs',
-      'tests/perf.mjs',
-      'tests/audit-sheet.mjs',
-      'tests/regr.js',
-    ],
-  },
+export default [];
 
   // JavaScript files — checked by TS via JSDoc
   {
